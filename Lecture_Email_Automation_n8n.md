@@ -54,9 +54,29 @@ soon"
 |------|-------------|------|
 | **n8n** | The robot brain - connects everything | FREE (on your laptop) |
 | **Ollama** | AI that reads emails and decides | FREE (on your laptop) |
-| **Gmail** | Email service | FREE |
+| **Any Email** | Gmail, Outlook, Yahoo, or business email | FREE |
 
 **No credit card needed. No subscription. Everything runs on YOUR laptop.**
+
+## Which Email Can I Use?
+
+This works with ANY email - not just Gmail!
+
+| Email Type | How to Connect in n8n |
+|------------|----------------------|
+| **Gmail** (free) | Use **Gmail** node - just sign in with Google |
+| **Business email** (info@yourcompany.com) | Use **IMAP Email** node |
+| **Outlook / Hotmail** | Use **IMAP Email** node |
+| **Yahoo** | Use **IMAP Email** node |
+
+**For business email users**, you will need these details from your email hosting provider:
+- **IMAP Host**: e.g., `mail.yourcompany.com` (ask your hosting provider)
+- **Port**: `993`
+- **Username**: your full email address
+- **Password**: your email password
+- **SSL**: Turn ON
+
+Most hosting providers (GoDaddy, Namecheap, Hostinger, etc.) show these settings in their dashboard.
 
 ---
 
@@ -137,9 +157,32 @@ Then open your browser and go to:
 http://localhost:5678
 ```
 
-You will see the n8n screen! It will ask you to create an account (this is LOCAL, just for your laptop).
+You will see the n8n screen! It will ask you to create an account.
 
-**Create a simple username and password you'll remember.**
+### Setting Up Your n8n Account (First Time Only):
+
+n8n will show a registration form. Here's what to know:
+
+| Field | What to Enter |
+|-------|--------------|
+| **First Name** | Your name (or anything) |
+| **Last Name** | Your last name (or anything) |
+| **Email** | Any email (does NOT need to be real) |
+| **Password** | Must be: **8+ characters, at least 1 number and 1 capital letter** |
+
+**Example passwords that work:** `Workshop1`, `Password1`, `Student123`
+
+**IMPORTANT - "Receive updates" checkbox:**
+
+You will see a checkbox that says *"I want to receive security and product updates"*.
+
+| If you check it | Your email is sent to n8n company servers (NOT local) |
+|----------------|------------------------------------------------------|
+| If you leave it unchecked | Everything stays 100% on your laptop |
+
+**Our recommendation: Leave it UNCHECKED.** This keeps everything private and local.
+
+Your login details (name, password) are stored locally in a file on your laptop at `C:\Users\YourName\.n8n\` -- they never leave your computer.
 
 ---
 
@@ -183,45 +226,67 @@ Think of it like a **factory assembly line**:
 
 ## Step 2: Add the Email Trigger (Block 1)
 
-This block checks your email for new messages.
+This block checks your email for new messages. Think of it as the robot's "ears" -- it listens for new emails.
 
 1. Click the **"+"** button on the canvas
-2. Search for **"Gmail Trigger"** (if using Gmail)
-   - If using other email: search **"IMAP Email Trigger"** (works with ANY email)
-3. Click on it to add it
+2. **Which node to search for?**
+   - Using **Gmail**? Search for **"Gmail"**
+   - Using **Outlook**? Search for **"Microsoft Outlook"**
+   - Using **business email or Yahoo**? Search for **"IMAP"**
+3. Click on it to add it to your canvas
 
-### Setting up Gmail Trigger:
+### Option A: Setting up Gmail (for Gmail users):
 
-1. Click on the Gmail Trigger node (block)
-2. You'll see settings on the right side
+1. Click the **"+"** on the canvas and search **"Gmail"**
+2. Click on **Gmail** -- you will see options like "Message Received", "Send a Message", etc.
+3. Select **"On Message Received"** (this is the trigger -- it starts the robot when a new email arrives)
+4. Click **"Credential"** > **"Create New"**
+5. A Google sign-in window will pop up -- sign in with your Gmail
+6. Click "Allow" to give n8n permission to read your emails
+7. Set **"Poll Times"** to: **Every 1 Minute**
+   (This means the robot checks for new emails every 1 minute)
+
+**Note for Gmail users:** You may need an "App Password" instead of your regular password.
+- Go to **myaccount.google.com** > Security > 2-Step Verification > App Passwords
+- Create one for "Mail" and use that password in n8n
+
+### Option B: Setting up IMAP (for business email, Outlook, Yahoo, or any other email):
+
+This method works with **ANY email provider** in the world.
+
+1. Click the **"+"** on the canvas and search **"IMAP"**
+2. Click on **IMAP Email** -- select the trigger option
 3. Click **"Credential"** > **"Create New"**
-4. It will ask you to sign in to your Gmail
-5. Sign in and allow access
-6. Set **"Poll Times"** to: Every 1 Minute
-   (This means the robot checks email every 1 minute)
-7. Set **"Event"** to: **"Message Received"**
+4. Fill in these details:
 
-### If Using IMAP (for any email like Yahoo, Outlook, business email):
+| Field | What to Enter | Example |
+|-------|--------------|---------|
+| **Host** | Your email provider's IMAP server | `mail.yourcompany.com` |
+| **Port** | Almost always `993` | `993` |
+| **User** | Your full email address | `info@yourcompany.com` |
+| **Password** | Your email password | Your password |
+| **SSL/TLS** | Turn **ON** | ON |
 
-1. Click on the IMAP node
-2. Click **"Credential"** > **"Create New"**
-3. Fill in:
-   - **Host**: imap.gmail.com (for Gmail) or your email provider's IMAP server
-   - **Port**: 993
-   - **User**: your full email address
-   - **Password**: your email password (or App Password for Gmail)
-   - **SSL**: Turn ON
-4. Set check interval to 1 minute
+5. Set check interval to **1 minute**
 
-**For Gmail users:** You need an "App Password" not your regular password.
-- Go to myaccount.google.com > Security > 2-Step Verification > App Passwords
-- Create one for "Mail" and use that password
+**Common IMAP settings by provider:**
+
+| Email Provider | Host | Port |
+|---------------|------|------|
+| **Hostinger** | `imap.hostinger.com` | `993` |
+| **GoDaddy** | `imap.secureserver.net` | `993` |
+| **Namecheap** | `mail.privateemail.com` | `993` |
+| **Gmail** | `imap.gmail.com` | `993` |
+| **Outlook/Hotmail** | `outlook.office365.com` | `993` |
+| **Yahoo** | `imap.mail.yahoo.com` | `993` |
+
+If your provider is not listed, check your hosting dashboard or ask your IT person.
 
 ## Step 3: Add the AI Brain (Block 2)
 
 This block sends the email to our local AI (Ollama) to decide if it's an order or query.
 
-1. Hover over the Gmail Trigger block, you'll see a small **"+"** on the right
+1. Hover over the email block (Gmail/Outlook/IMAP), you'll see a small **"+"** on the right
 2. Click that **"+"**
 3. Search for **"Ollama"** or **"HTTP Request"**
 
@@ -230,24 +295,29 @@ This block sends the email to our local AI (Ollama) to decide if it's an order o
 1. Click **Ollama**
 2. Set it up:
    - **Model**: llama3.2
-   - **URL**: http://localhost:11434 (this is where Ollama runs on your laptop)
+   - **URL**: http://127.0.0.1:11434 (this is where Ollama runs on your laptop)
 
 ### Option B: Using HTTP Request node (works always):
 
 1. Search and add **"HTTP Request"** node
 2. Settings:
    - **Method**: POST
-   - **URL**: `http://localhost:11434/api/generate`
+   - **URL**: `http://127.0.0.1:11434/api/generate`
    - **Body Type**: JSON
    - **JSON Body**:
 
 ```json
 {
   "model": "llama3.2",
-  "prompt": "Read this email and reply with ONLY one word - either ORDER or QUERY. Nothing else. Just one word.\n\nEmail: {{ $json.text }}",
+  "prompt": "Classify this email as ORDER or QUERY. Reply with ONLY one word.\n\nORDER = customer wants to BUY something.\nQUERY = customer is ASKING a question.\n\nEmail subject: {{ $json.subject }}\n\nClassification:",
   "stream": false
 }
 ```
+
+**Why we use `{{ $json.subject }}` instead of `{{ $json.textHtml }}`:**
+- Email body (textHtml) contains HTML with quotes `"` that break the JSON
+- The email subject is plain text -- safe to embed in JSON
+- The subject line is usually enough for the AI to classify correctly
 
 **What's happening here:**
 - We're sending the email text to our AI
@@ -263,21 +333,62 @@ Sometimes AI adds extra spaces or words. Let's clean it.
 1. Add a **"Code"** node (search "Code")
 2. Don't worry! Just paste this code exactly:
 
+Use the code that matches YOUR email setup. Copy the one that applies to you.
+
+### If using IMAP Email (Hostinger, GoDaddy, business email, Yahoo, Outlook):
+
+**IMPORTANT:** Replace `Email Trigger (IMAP)` with the exact name of your email block on the canvas.
+
 ```javascript
-// Get AI response and clean it
 let response = "";
 
-// If using HTTP Request to Ollama
 if ($input.first().json.response) {
   response = $input.first().json.response;
 } else {
   response = JSON.stringify($input.first().json);
 }
 
-// Clean it - just get ORDER or QUERY
 response = response.toUpperCase().trim();
 
-let result = "QUERY"; // default to query (safer)
+let result = "QUERY";
+
+if (response.includes("ORDER")) {
+  result = "ORDER";
+}
+
+const emailNode = $('Email Trigger (IMAP)').first().json;
+
+// Get email body - try plain text first, then HTML (strip tags)
+let emailBody = emailNode.textPlain;
+if (!emailBody || emailBody.trim() === "") {
+  emailBody = (emailNode.textHtml || "").replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim();
+}
+
+const sender = emailNode.from || "Unknown";
+
+return [{ json: {
+  decision: result,
+  originalEmail: emailBody || "No content",
+  senderEmail: sender,
+  senderName: sender.split('<')[0].trim() || "Customer",
+  subject: emailNode.subject || "No subject"
+}}];
+```
+
+### If using Gmail:
+
+```javascript
+let response = "";
+
+if ($input.first().json.response) {
+  response = $input.first().json.response;
+} else {
+  response = JSON.stringify($input.first().json);
+}
+
+response = response.toUpperCase().trim();
+
+let result = "QUERY";
 
 if (response.includes("ORDER")) {
   result = "ORDER";
@@ -285,10 +396,10 @@ if (response.includes("ORDER")) {
 
 return [{ json: {
   decision: result,
-  originalEmail: $('Gmail Trigger').first().json.text,
-  senderEmail: $('Gmail Trigger').first().json.from.value[0].address,
-  senderName: $('Gmail Trigger').first().json.from.value[0].name || "Customer",
-  subject: $('Gmail Trigger').first().json.subject
+  originalEmail: $('Gmail').first().json.text,
+  senderEmail: $('Gmail').first().json.from.value[0].address,
+  senderName: $('Gmail').first().json.from.value[0].name || "Customer",
+  subject: $('Gmail').first().json.subject
 }}];
 ```
 
@@ -298,6 +409,8 @@ return [{ json: {
 - If yes -> marks as ORDER
 - If no -> marks as QUERY
 - Also saves the customer's email, name, and subject for later use
+
+**IMPORTANT:** The name in `$('IMAP Email')` or `$('Gmail')` must match the exact name shown on your email block on the canvas. If you renamed the block, use that name instead.
 
 ## Step 5: Add the Decision Splitter (Block 4)
 
@@ -600,4 +713,4 @@ Step 3: Close terminals
 
 *Lecture prepared for Digital Marketing Students*
 *All tools used: FREE and LOCAL (no internet subscription needed)*
-*Built with: n8n + Ollama + Gmail*
+*Built with: n8n + Ollama + Any Email (Gmail, Outlook, Yahoo, Business Email)*
